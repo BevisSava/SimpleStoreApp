@@ -1,0 +1,87 @@
+﻿@model Assignment2.Models.Order
+@{
+    ViewData["Title"] = "Hóa Đơn Mua Hàng";
+    decimal totalAmount = 0; 
+}
+
+<div class="container mt-4 mb-5">
+    <div class="card shadow-lg border-0" style="border-radius: 10px;">
+        <div class="card-header bg-dark text-white text-center py-3" style="border-radius: 10px 10px 0 0;">
+            <h2 class="mb-0 fw-bold">HÓA ĐƠN XUẤT HÀNG</h2>
+        </div>
+        <div class="card-body p-5">
+
+            <div class="row mb-5">
+                <div class="col-sm-7">
+                    <h5 class="text-muted mb-2">Đại lý đặt hàng:</h5>
+                    <h3 class="text-primary fw-bold">@Model.Agent.AgentName</h3>
+                    <p class="mb-1"><strong>Địa chỉ:</strong> @Model.Agent.Address</p>
+                    <p class="mb-1"><strong>Mã Đại lý:</strong> #@Model.Agent.AgentID</p>
+                </div>
+                <div class="col-sm-5 text-sm-end">
+                    <h5 class="text-muted mb-2">Thông tin Hóa đơn:</h5>
+                    <h4 class="text-danger fw-bold">Mã Hóa đơn: #@Model.OrderID</h4>
+                    <p class="mb-1"><strong>Ngày lập:</strong> @Model.OrderDate.ToString("dd/MM/yyyy")</p>
+                </div>
+            </div>
+
+            <div class="table-responsive mb-4">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th class="text-center">STT</th>
+                            <th>Tên Sản phẩm</th>
+                            <th class="text-center">Size</th>
+                            <th class="text-center">Số lượng</th>
+                            <th class="text-end">Đơn giá</th>
+                            <th class="text-end">Thành tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int stt = 1;
+                        }
+                        @foreach (var detail in Model.OrderDetails)
+                        {
+                            decimal subTotal = detail.Quantity * detail.UnitAmount;
+                            totalAmount += subTotal;
+                            <tr>
+                                <td class="text-center">@(stt++)</td>
+                                <td>@detail.Item.ItemName</td>
+                                <td class="text-center">@detail.Item.Size</td>
+                                <td class="text-center fw-bold">@detail.Quantity</td>
+                                <td class="text-end">@detail.UnitAmount.ToString("N0") đ</td>
+                                <td class="text-end text-success fw-bold">@subTotal.ToString("N0") đ</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" class="text-end fw-bold fs-5 text-uppercase">Tổng Cộng:</td>
+                            <td class="text-end fw-bold fs-4 text-danger">@totalAmount.ToString("N0") VNĐ</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="text-center mt-5 d-print-none border-top pt-4">
+                <a asp-action="Create" class="btn btn-outline-secondary btn-lg me-3">
+                    🔙 Tạo đơn khác
+                </a>
+                <button onclick="window.print()" class="btn btn-primary btn-lg px-5 shadow">
+                    🖨️ IN HÓA ĐƠN
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @@media print {
+        .d-print-none, header, footer, nav {
+            display: none !important;
+        }
+        .card { border: none !important; box-shadow: none !important; }
+        body { background-color: white !important; }
+    }
+</style>

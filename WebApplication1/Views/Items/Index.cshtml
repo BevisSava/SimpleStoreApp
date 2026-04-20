@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Assignment2.Models.Item>
+@{
+    ViewData["Title"] = "Danh sách Sản phẩm";
+}
+
+<div class="container mt-4">
+    <h2 class="text-primary fw-bold mb-4">QUẢN LÝ SẢN PHẨM</h2>
+
+    <a asp-action="Create" class="btn btn-success mb-3">
+        + Thêm Sản phẩm mới
+    </a>
+
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th class="text-center">Mã SP</th>
+                    <th>Tên Sản phẩm</th>
+                    <th class="text-center">Kích cỡ (Size)</th>
+                    <th class="text-end">Đơn giá</th>
+                    <th class="text-center">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-center fw-bold">@item.ItemID</td>
+                        <td>@item.ItemName</td>
+                        <td class="text-center">
+                            <span class="badge bg-info text-dark">@item.Size</span>
+                        </td>
+                        <td class="text-end text-danger fw-bold">
+                            @item.Price.ToString("N0") VNĐ
+                        </td>
+                        <td class="text-center">
+                            <a href="#" class="btn btn-sm btn-outline-primary">Sửa</a>
+                            <a href="#" class="btn btn-sm btn-outline-danger">Xóa</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

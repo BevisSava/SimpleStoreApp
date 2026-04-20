@@ -1,0 +1,69 @@
+﻿@model IEnumerable<Assignment2.Models.OrderDetail>
+@{
+    ViewData["Title"] = "Báo Cáo & Lọc Dữ Liệu";
+}
+
+<div class="container mt-4">
+    <h2 class="text-primary fw-bold mb-4">📊 THỐNG KÊ SẢN PHẨM KHÁCH HÀNG ĐÃ MUA</h2>
+
+    <div class="card shadow-sm mb-4 border-0 bg-light">
+        <div class="card-body">
+            <form asp-action="Index" method="get">
+                <div class="row align-items-end">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-dark">Chọn Đại lý cần xem:</label>
+                        <select name="searchAgentId" class="form-select border-primary" asp-items="ViewBag.Agents">
+                            <option value="">-- Hiển thị Tất cả Đại lý --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100 fw-bold">
+                            🔍 LỌC DỮ LIỆU
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th class="text-center">Ngày Đặt</th>
+                    <th>Tên Đại lý</th>
+                    <th>Tên Sản phẩm Mua</th>
+                    <th class="text-center">Số lượng</th>
+                    <th class="text-end">Đơn giá</th>
+                    <th class="text-end">Tổng tiền món hàng</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-danger fw-bold py-4">
+                            Không tìm thấy dữ liệu mua hàng nào cho Đại lý này!
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="text-center">@item.Order.OrderDate.ToString("dd/MM/yyyy")</td>
+                            <td class="fw-bold text-success">@item.Order.Agent.AgentName</td>
+                            <td>@item.Item.ItemName</td>
+                            <td class="text-center fw-bold">@item.Quantity</td>
+                            <td class="text-end text-muted">@item.UnitAmount.ToString("N0") đ</td>
+                            <td class="text-end text-danger fw-bold">
+                                @((item.Quantity * item.UnitAmount).ToString("N0")) VNĐ
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
